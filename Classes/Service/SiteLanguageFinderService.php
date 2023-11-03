@@ -19,7 +19,7 @@ final readonly class SiteLanguageFinderService
     public function __construct(
         private IpCountryLocatorInterface $ipCountryLocator,
         private EventDispatcherInterface $eventDispatcher,
-        private bool $ipCountryIsMoreImportantThanLanguage = false,
+        private string|bool $ipCountryIsMoreImportantThanLanguage = false,
     ) {
     }
 
