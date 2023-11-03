@@ -36,8 +36,6 @@ return static function (RectorConfig $rectorConfig): void {
             /**
              * rector should not touch these files
              */
-            __DIR__ . '/ext_emconf.php',
-
             ReadOnlyClassRector::class,
         ]
     );
