@@ -1,0 +1,11 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Instanceof between AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\CloudflareHeader\\|AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\MmdbFile\\|AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\SucuriHeader and AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator will always evaluate to false\\.$#"
+			count: 1
+			path: Classes/Service/IpCountryLocator.php
+
+		-
+			message: "#^Method AUS\\\\GeoRedirect\\\\XClass\\\\Redirects\\\\Service\\\\RedirectService\\:\\:bootFrontendController\\(\\) has invalid return type TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\.$#"
+			count: 1
+			path: Classes/XClass/Redirects/Service/RedirectService.php

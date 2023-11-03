@@ -1,0 +1,49 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+    bind:
+      $ipCountryIsMoreImportantThanLanguage: '@geo_redirect.ipCountryIsMoreImportantThanLanguage'
+      $maxmindLicenseKey: '@geo_redirect.maxmindLicenseKey'
+
+  AUS\GeoRedirect\:
+    resource: '../Classes/*'
+    exclude: '../Classes/**/{Model,Dto}/*'
+
+  ## Commands:
+  AUS\GeoRedirect\Command\UpdateUpDatabaseCommand:
+    tags:
+      -
+        name: console.command
+        command: 'geo-redirect:update-up-database'
+        description: 'updates the Ip Database'
+        schedulable: true
+
+  ## Interface Definitions:
+  AUS\GeoRedirect\Service\IpCountryLocator\IpCountryLocatorInterface:
+    alias: AUS\GeoRedirect\Service\IpCountryLocator
+
+  ## XClasses:
+  # override the redirect service, so we can decide what siteLanguage to use:
+  TYPO3\CMS\Redirects\Service\RedirectService:
+    class: AUS\GeoRedirect\XClass\Redirects\Service\RedirectService
+
+  ## Extension Configuration:
+  geo_redirect.ipCountryIsMoreImportantThanLanguage:
+    class: bool
+    factory:
+      - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+      - 'get'
+    arguments:
+      $extension: 'geo_redirect'
+      $path: 'ipCountryIsMoreImportantThanLanguage'
+
+  geo_redirect.maxmindLicenseKey:
+    class: string
+    factory:
+      - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+      - 'get'
+    arguments:
+      $extension: 'geo_redirect'
+      $path: 'maxmindLicenseKey'

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+  <file target-language="de" datatype="plaintext" original="messages">
+    <body>
+
+      <trans-unit id="config.maxmindLicenseKey">
+        <target>Maxmind.com Lizenzschlüssel: Wenn Sie die mmdb-Datei verwenden möchten, sollten Sie den Lizenzschlüssel hinzufügen. (https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)</target>
+      </trans-unit>
+
+      <trans-unit id="config.ipCountryIsMoreImportantThanLanguage">
+        <target>Land wichtiger als Sprache: Wenn es wichtiger ist, dass der Benutzer Inhalte für sein Land erhält, als dass er Inhalte für seine Sprachen erhält, dann aktivieren Sie diese Option.</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,24 @@
+pipelines:
+  default:
+    - parallel:
+      - step:
+          name: PHP 8.2 + TYPO3 11
+          image: kanti/buildy:8.2
+          caches:
+            - composer
+          script:
+            - echo 'memory_limit=-1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+            - composer req typo3/cms-frontend:^11
+            - ./vendor/bin/grumphp run
+            - composer test
+
+      - step:
+          name: PHP 8.2 + TYPO3 12
+          image: kanti/buildy:8.2
+          caches:
+            - composer
+          script:
+            - echo 'memory_limit=-1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+            - composer req typo3/cms-frontend:^12 --ignore-platform-req=ext-intl
+            - ./vendor/bin/grumphp run
+            - composer test

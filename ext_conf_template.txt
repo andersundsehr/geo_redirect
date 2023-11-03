@@ -1,0 +1,6 @@
+# cat=Settings; type=boolean; label=LLL:EXT:geo_redirect/Resources/Private/Language/locallang.xlf:config.ipCountryIsMoreImportantThanLanguage
+ipCountryIsMoreImportantThanLanguage =
+
+
+# cat=Settings; type=string; label=LLL:EXT:geo_redirect/Resources/Private/Language/locallang.xlf:config.maxmindLicenseKey
+maxmindLicenseKey =
