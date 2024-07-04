@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AUS\GeoRedirect\Tests;
 
+use Generator;
 use AUS\GeoRedirect\Service\IpCountryLocator\NullLocator;
 use AUS\GeoRedirect\Service\SiteLanguageFinderService;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -45,7 +46,7 @@ final class SiteLanguageFinderServiceTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    public static function findSiteDataProvider(): \Generator
+    public static function findSiteDataProvider(): Generator
     {
         $site = new Site('site', 14253, [
             'languages' => [
