@@ -12,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Site\Entity\Site;
 
 final readonly class RedirectMiddleware implements MiddlewareInterface
@@ -38,6 +39,9 @@ final readonly class RedirectMiddleware implements MiddlewareInterface
         }
 
         $site = $request->getAttribute('site');
+        if ($site instanceof NullSite) {
+            return $handler->handle($request);
+        }
         assert($site instanceof Site);
         foreach ($site->getLanguages() as $language) {
             if ($language->getBase()->getHost() !== $request->getUri()->getHost()) {
