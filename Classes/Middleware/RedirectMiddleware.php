@@ -48,7 +48,12 @@ final readonly class RedirectMiddleware implements MiddlewareInterface
                 continue;
             }
 
-            if ($language->getBase()->getPath() !== $request->getUri()->getPath()) {
+            if ($language->getBase()->getPath() !== $request->getUri()->getPath() &&
+                (
+                    ($language->getBase()->getPath() !== '' && $language->getBase()->getPath() !== '/') &&
+                    ($request->getUri()->getPath() !== '' && $request->getUri()->getPath() !== '/')
+                )
+            ) {
                 continue;
             }
 
