@@ -68,10 +68,8 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
             return $handler->handle($request);
         }
 
-        if ($currentRequestLanguage) {
-            if ($this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')) {
-                return $handler->handle($request);
-            }
+        if ($currentRequestLanguage && $this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')) {
+            return $handler->handle($request);
         }
 
         $ipCountryCode = $this->ipCountryLocator->getIpCountry() ?? '';
