@@ -25,12 +25,15 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
     use LoggerAwareTrait;
 
     public function __construct(
-        private SiteLanguageFinderService $siteLanguageFinderService,
-        private IpCountryLocatorInterface $ipCountryLocator,
-        private Context $context,
+        private readonly SiteLanguageFinderService $siteLanguageFinderService,
+        private readonly IpCountryLocatorInterface $ipCountryLocator,
+        private readonly Context $context,
     ) {
     }
 
+    /**
+     * @throws AspectNotFoundException
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($request->getUri()->getPath() === '/geo_redirect/debug') {
@@ -66,12 +69,8 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
         }
 
         if ($currentRequestLanguage) {
-            try {
-                if ($this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')) {
-                    return $handler->handle($request);
-                }
-            } catch (AspectNotFoundException $exception) {
-                $this->logger?->error('Could not find backend user aspect', ['exception' => $exception]);
+            if ($this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')) {
+                return $handler->handle($request);
             }
         }
 
