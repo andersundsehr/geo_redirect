@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 
 final readonly class RedirectMiddleware implements MiddlewareInterface
 {
@@ -38,10 +39,12 @@ final readonly class RedirectMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
+        /** @var null|SiteInterface $site */
         $site = $request->getAttribute('site');
         if ($site instanceof NullSite) {
             return $handler->handle($request);
         }
+
         assert($site instanceof Site);
         foreach ($site->getLanguages() as $language) {
             if ($language->getBase()->getHost() !== $request->getUri()->getHost()) {
@@ -52,7 +55,8 @@ final readonly class RedirectMiddleware implements MiddlewareInterface
                 return $handler->handle($request);
             }
 
-            if ($language->getBase()->getPath() !== $request->getUri()->getPath()
+            if (
+                $language->getBase()->getPath() !== $request->getUri()->getPath()
             ) {
                 continue;
             }

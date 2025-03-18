@@ -90,7 +90,7 @@ final class MmdbFile implements IpCountryLocatorInterface, SingletonInterface
 
         $glob = glob(dirname($databaseFile) . '/*.mmdb');
         if (!$glob) {
-            throw new RuntimeException('no mmdb file found in tar of the maxmind API');
+            throw new RuntimeException('no mmdb file found in tar of the maxmind API', 3770624500);
         }
 
         foreach ($glob as $mmdbFile) {
