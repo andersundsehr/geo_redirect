@@ -6,21 +6,28 @@ namespace AUS\GeoRedirect\Middleware;
 
 use AUS\GeoRedirect\Service\IpCountryLocator\IpCountryLocatorInterface;
 use AUS\GeoRedirect\Service\SiteLanguageFinderService;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
-use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 
-final readonly class RedirectMiddleware implements MiddlewareInterface
+final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public function __construct(
         private SiteLanguageFinderService $siteLanguageFinderService,
-        private IpCountryLocatorInterface $ipCountryLocator
+        private IpCountryLocatorInterface $ipCountryLocator,
+        private Context $context,
     ) {
     }
 
@@ -45,28 +52,30 @@ final readonly class RedirectMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        assert($site instanceof Site);
-        foreach ($site->getLanguages() as $language) {
-            if ($language->getBase()->getHost() !== $request->getUri()->getHost()) {
-                continue;
-            }
-
-            if ($request->getUri()->getPath() === '/' && $language->getBase()->getPath() === '') {
-                return $handler->handle($request);
-            }
-
-            if (
-                $language->getBase()->getPath() !== $request->getUri()->getPath()
-            ) {
-                continue;
-            }
-
-            // there is a language with our host and path, so we can not redirect to any other.
+        try {
+            // on extension set up the mmdb does not exist, do not break instance
+            $targetSiteLanguage = $this->siteLanguageFinderService->findByRequest($request);
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $this->logger?->error('Could not find target language', ['exception' => $invalidArgumentException]);
             return $handler->handle($request);
         }
 
-        $siteLanguage = $this->siteLanguageFinderService->findByRequest($request);
+        $currentRequestLanguage = $request->getAttribute('language');
+        if ($targetSiteLanguage === $currentRequestLanguage) {
+            return $handler->handle($request);
+        }
+
+        if ($currentRequestLanguage) {
+            try {
+                if ($this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')) {
+                    return $handler->handle($request);
+                }
+            } catch (AspectNotFoundException $exception) {
+                $this->logger?->error('Could not find backend user aspect', ['exception' => $exception]);
+            }
+        }
+
         $ipCountryCode = $this->ipCountryLocator->getIpCountry() ?? '';
-        return new RedirectResponse($siteLanguage->getBase(), 307, ['X-RedirectReason' => 'geo_redirect ipCountry: "' . $ipCountryCode . '"']);
+        return new RedirectResponse($targetSiteLanguage->getBase(), 307, ['X-RedirectReason' => 'geo_redirect ipCountry: "' . $ipCountryCode . '"']);
     }
 }
