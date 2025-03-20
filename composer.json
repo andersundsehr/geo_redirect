@@ -9,7 +9,7 @@
     "ext-json": "*",
     "composer-runtime-api": "^2",
     "codezero/browser-locale": "^3.3",
-    "maxmind-db/reader": "~1.8",
+    "maxmind-db/reader": "^1.8",
     "typo3/cms-backend": "^11.5.0 || ^12.4.0",
     "typo3/cms-core": "^11.5.0 || ^12.4.0",
     "typo3/cms-redirects": "^11.5.0 || ^12.4.0"
