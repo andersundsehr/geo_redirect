@@ -11,8 +11,10 @@ use CodeZero\BrowserLocale\Locale;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 final readonly class SiteLanguageFinderService
 {
@@ -21,6 +23,9 @@ final readonly class SiteLanguageFinderService
         private EventDispatcherInterface $eventDispatcher,
         private string|bool $ipCountryIsMoreImportantThanLanguage = false,
     ) {
+        if (!Environment::isComposerMode() && !class_exists(BrowserLocale::class)) {
+            require ExtensionManagementUtility::extPath('geo_redirect') . '/vendor/autoload.php';
+        }
     }
 
     public function findByRequest(?ServerRequestInterface $request = null): SiteLanguage
@@ -54,7 +59,6 @@ final readonly class SiteLanguageFinderService
                 $siteLanguages['-' . $explode[1]] ??= $language;
             }
         }
-
         $browserLocale = new BrowserLocale($httpHeader);
 
         $ipCountryCode = $ipCountryCode ?: 'xx';

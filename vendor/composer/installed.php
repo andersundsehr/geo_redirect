@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'andersundsehr/geo_redirect',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '8ac0343bd9e53bf598e1dc5a728e5efba9cdb390',
+        'type' => 'typo3-cms-extension',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => false,
+    ),
+    'versions' => array(
+        'andersundsehr/geo_redirect' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '8ac0343bd9e53bf598e1dc5a728e5efba9cdb390',
+            'type' => 'typo3-cms-extension',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'codezero/browser-locale' => array(
+            'pretty_version' => '3.4.0',
+            'version' => '3.4.0.0',
+            'reference' => 'dd6c50e5557b06b57960df6db7f52e85ef683e5e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../codezero/browser-locale',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'maxmind-db/reader' => array(
+            'pretty_version' => 'v1.12.0',
+            'version' => '1.12.0.0',
+            'reference' => '5b2d7a721dedfaef9dc20822c5fe7d26f9f8eb90',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../maxmind-db/reader',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);
