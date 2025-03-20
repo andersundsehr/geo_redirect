@@ -3,7 +3,7 @@
         'name' => 'andersundsehr/geo_redirect',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8ac0343bd9e53bf598e1dc5a728e5efba9cdb390',
+        'reference' => 'afb916f4603a9f7611976880a0d7b0d095650baf',
         'type' => 'typo3-cms-extension',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'andersundsehr/geo_redirect' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8ac0343bd9e53bf598e1dc5a728e5efba9cdb390',
+            'reference' => 'afb916f4603a9f7611976880a0d7b0d095650baf',
             'type' => 'typo3-cms-extension',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -1,7 +1,8 @@
 includes:
   - phpstan-baseline.neon
-  - vendor/andersundsehr/phpstan-git-files/extension.php
 
 parameters:
-  level: 8
+  level: 9
   reportUnmatchedIgnoredErrors: false
+  paths:
+    - ./Classes/
