@@ -59,6 +59,7 @@ final readonly class SiteLanguageFinderService
                 $siteLanguages['-' . $explode[1]] ??= $language;
             }
         }
+
         $browserLocale = new BrowserLocale($httpHeader);
 
         $ipCountryCode = $ipCountryCode ?: 'xx';

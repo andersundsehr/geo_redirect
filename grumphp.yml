@@ -6,7 +6,7 @@ parameters:
   convention.jsonlint_ignore_pattern: {  }
   convention.xmllint_ignore_pattern: {  }
   convention.yamllint_ignore_pattern: {  }
-  convention.phpcslint_ignore_pattern: {  }
+  convention.phpcslint_ignore_pattern: [ 'vendor/*' ]
   convention.phpcslint_exclude: {  }
   convention.xlifflint_ignore_pattern: {  }
   convention.rector_ignore_pattern: {  }
@@ -14,3 +14,7 @@ parameters:
   convention.rector_config: rector.php
   convention.rector_clear-cache: false
   convention.phpstan_level: null
+grumphp:
+  tasks:
+    phpstan:
+      ignore_patterns: [ 'vendor/' ]
