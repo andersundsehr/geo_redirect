@@ -4,35 +4,40 @@ declare(strict_types=1);
 
 namespace AUS\GeoRedirect\XClass\Redirects\Service;
 
-use AUS\GeoRedirect\Dto\OverwriteSiteLanguage;
 use AUS\GeoRedirect\Service\SiteLanguageFinderService;
 use Psr\Http\Message\ServerRequestInterface;
-use Throwable;
-use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use Psr\Http\Message\UriInterface;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 final class RedirectService extends \TYPO3\CMS\Redirects\Service\RedirectService
 {
+    private SiteLanguage $siteLanguage;
+
     /**
-     * @param array<string, mixed> $queryParams
+     * @param array<mixed> $matchedRedirect
      */
-    protected function bootFrontendController(SiteInterface $site, array $queryParams, ServerRequestInterface $originalRequest): TypoScriptFrontendController
+    public function getTargetUrl(array $matchedRedirect, ServerRequestInterface $request): ?UriInterface
     {
         $siteLanguageFinderService = GeneralUtility::makeInstance(SiteLanguageFinderService::class);
         assert($siteLanguageFinderService instanceof SiteLanguageFinderService);
-        $siteLanguage = $siteLanguageFinderService->findByRequest($originalRequest);
-        $manipulatedSite = new OverwriteSiteLanguage($site, $siteLanguage);
+        $this->siteLanguage = $siteLanguageFinderService->findByRequest($request);
+        return parent::getTargetUrl($matchedRedirect, $request);
+    }
 
-        try {
-            return parent::bootFrontendController($manipulatedSite, $queryParams, $originalRequest);
-        } catch (Throwable $throwable) {
-            // fallback if page is not in the correct language:
-            if ($throwable->getCode() === 1533931402) {
-                return parent::bootFrontendController($site, $queryParams, $originalRequest);
-            }
-
-            throw $throwable;
+    /**
+     * @inheritdoc
+     * @return array<string, mixed>
+     */
+    protected function resolveLinkDetailsFromLinkTarget(string $redirectTarget): array
+    {
+        $linkDetails = parent::resolveLinkDetailsFromLinkTarget($redirectTarget);
+        if ($linkDetails['type'] === 'page') {
+            parse_str($linkDetails['parameters'] ?? '', $query);
+            $query['L'] = $this->siteLanguage->getLanguageId();
+            $linkDetails['parameters'] = http_build_query($query);
         }
+
+        return $linkDetails;
     }
 }
