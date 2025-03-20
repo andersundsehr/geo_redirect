@@ -9,12 +9,13 @@ use AUS\GeoRedirect\Service\IpCountryLocator\NullLocator;
 use AUS\GeoRedirect\Service\SiteLanguageFinderService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-final class SiteLanguageFinderServiceTest extends TestCase
+final class SiteLanguageFinderServiceTest extends UnitTestCase
 {
     /** @var int */
     public const DE = 0;
