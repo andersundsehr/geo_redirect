@@ -16,7 +16,7 @@ Get your key here: https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
 ## Features
 
 - Redirect domain root to detected language
-- Redirect sys_redirect to detected language
+- Redirect sys_redirect to detected language (TYPO3 => v12 only)
 
 ## How it works
 
@@ -33,7 +33,7 @@ Otherwise it will ignore the request origin country. And just use the Accept-Lan
 
 ### mmdb file
 
-The mmdb file is downloaded from maxmind.com and is updated every 5 weeks automatically.  
+The mmdb file is downloaded from maxmind.com and is updated *every 5 weeks* automatically.
 If you always want the best performance for your users,  
 you should add the `typo3 geo-redirect:update-up-database` command to run every month (4 weeks).
 
