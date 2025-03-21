@@ -14,6 +14,8 @@ final class RedirectService extends \TYPO3\CMS\Redirects\Service\RedirectService
 {
     private SiteLanguage $siteLanguage;
 
+    private bool $urlNotFound = false;
+
     /**
      * @param array<mixed> $matchedRedirect
      */
@@ -22,6 +24,12 @@ final class RedirectService extends \TYPO3\CMS\Redirects\Service\RedirectService
         $siteLanguageFinderService = GeneralUtility::makeInstance(SiteLanguageFinderService::class);
         assert($siteLanguageFinderService instanceof SiteLanguageFinderService);
         $this->siteLanguage = $siteLanguageFinderService->findByRequest($request);
+        $url = parent::getTargetUrl($matchedRedirect, $request);
+        if (null !== $url) {
+            return $url;
+        }
+
+        $this->urlNotFound = true;
         return parent::getTargetUrl($matchedRedirect, $request);
     }
 
@@ -34,7 +42,11 @@ final class RedirectService extends \TYPO3\CMS\Redirects\Service\RedirectService
         $linkDetails = parent::resolveLinkDetailsFromLinkTarget($redirectTarget);
         if ($linkDetails['type'] === 'page') {
             parse_str($linkDetails['parameters'] ?? '', $query);
-            $query['L'] = $this->siteLanguage->getLanguageId();
+            // if the url is not generated in translation, return the current language url
+            if (false === $this->urlNotFound) {
+                $query['L'] = $this->siteLanguage->getLanguageId();
+            }
+
             $linkDetails['parameters'] = http_build_query($query);
         }
 
