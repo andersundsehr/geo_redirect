@@ -25,7 +25,7 @@ final readonly class SiteLanguageFinderService
 
     public function findByRequest(?ServerRequestInterface $request = null): SiteLanguage
     {
-        $request ??= $GLOBALS['TYPO3_REQUEST'] ?? throw new RuntimeException('No request found This api is not working in cli mode');
+        $request ??= $GLOBALS['TYPO3_REQUEST'] ?? throw new RuntimeException('No request found This api is not working in cli mode', 9665405638);
 
         return $this->findLanguage(
             $request->getHeaderLine('accept-language'),

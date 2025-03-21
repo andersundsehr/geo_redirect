@@ -47,3 +47,9 @@ services:
     arguments:
       $extension: 'geo_redirect'
       $path: 'maxmindLicenseKey'
+
+  AUS\GeoRedirect\Listener\CacheRuleListener:
+    tags:
+      - name: event.listener
+        identifier: 'AUS\GeoRedirect\Listener\CacheRuleListener'
+        event: SFC\Staticfilecache\Event\CacheRuleEvent
