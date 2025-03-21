@@ -44,7 +44,7 @@ final class IpCountryLocator implements IpCountryLocatorInterface, SingletonInte
         foreach ($geoLocatorClasses as $locatorClass) {
             $locator = GeneralUtility::makeInstance($locatorClass);
             if (!$locator instanceof IpCountryLocatorInterface) {
-                throw new RuntimeException('IpCountryLocatorInterface expected, class ' . $locatorClass . ' does not implement it.');
+                throw new RuntimeException('IpCountryLocatorInterface expected, class ' . $locatorClass . ' does not implement it.', 4307491102);
             }
 
             if ($locator instanceof IpCountryLocator) {

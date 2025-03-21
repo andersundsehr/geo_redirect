@@ -53,11 +53,11 @@ final class CollectIpCountryLocatorEvent
     private function validate(string $countryLocator): void
     {
         if (!class_exists($countryLocator)) {
-            throw new Exception('Class ' . $countryLocator . ' does not exist.');
+            throw new Exception('Class ' . $countryLocator . ' does not exist.', 7668017858);
         }
 
         if (!is_a($countryLocator, IpCountryLocatorInterface::class, true)) {
-            throw new Exception('Class ' . $countryLocator . ' does not exist.');
+            throw new Exception('Class ' . $countryLocator . ' does not exist.', 9265581551);
         }
     }
 }

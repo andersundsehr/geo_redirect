@@ -29,8 +29,15 @@ final class MmdbFile implements IpCountryLocatorInterface, SingletonInterface
             return null;
         }
 
-        $country = $this->getReader()->get($ip)['country']['iso_code'] ?? '';
-        return strtolower((string)$country) ?: null;
+        $ipRecord =  $this->getReader()->get($ip);
+        if (null === $ipRecord) {
+            return null;
+        }
+
+        /** @var array<string, array<string, mixed>> $ipRecord */
+        $country = $ipRecord['country']['iso_code'] ?? '';
+        assert(is_string($country));
+        return strtolower($country) ?: null;
     }
 
     public function getDebugInfo(): string
@@ -90,7 +97,7 @@ final class MmdbFile implements IpCountryLocatorInterface, SingletonInterface
 
         $glob = glob(dirname($databaseFile) . '/*.mmdb');
         if (!$glob) {
-            throw new RuntimeException('no mmdb file found in tar of the maxmind API');
+            throw new RuntimeException('no mmdb file found in tar of the maxmind API', 3770624500);
         }
 
         foreach ($glob as $mmdbFile) {
