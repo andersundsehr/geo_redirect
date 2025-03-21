@@ -9,6 +9,8 @@ use AUS\GeoRedirect\Service\SiteLanguageFinderService;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use TYPO3\CMS\Core\Site\Entity\SiteSettings;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -22,7 +24,7 @@ final class RedirectService extends \TYPO3\CMS\Redirects\Service\RedirectService
         $siteLanguageFinderService = GeneralUtility::makeInstance(SiteLanguageFinderService::class);
         assert($siteLanguageFinderService instanceof SiteLanguageFinderService);
         $siteLanguage = $siteLanguageFinderService->findByRequest($originalRequest);
-        $manipulatedSite = new OverwriteSiteLanguage($site, $siteLanguage);
+	$manipulatedSite = new Site($site->getIdentifier(), $site->getRootPageId(), $site->getConfiguration(), new SiteSettings([new OverwriteSiteLanguage($site, $siteLanguage)]));
 
         try {
             return parent::bootFrontendController($manipulatedSite, $queryParams, $originalRequest);
