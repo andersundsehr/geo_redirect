@@ -16,8 +16,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
           key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -36,11 +36,9 @@ jobs:
       TYPO3_EXTENSION_KEY: 'geo_redirect'
       REPOSITORY_URL: 'https://github.com/andersundsehr/geo_redirect'
       TYPO3_API_TOKEN: ${{ secrets.TYPO3_API_TOKEN }}
-      TYPO3_API_USERNAME: ${{ secrets.TYPO3_API_USERNAME }}
-      TYPO3_API_PASSWORD: ${{ secrets.TYPO3_API_PASSWORD }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
@@ -48,7 +46,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.4'
           extensions: intl, mbstring, xml, soap, zip, curl
 
       - name: Install typo3/tailor
