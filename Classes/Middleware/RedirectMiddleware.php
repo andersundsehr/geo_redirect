@@ -19,6 +19,7 @@ use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 
 final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterface
 {
@@ -55,6 +56,14 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
             return $handler->handle($request);
         }
 
+        $currentRequestLanguage = $request->getAttribute('language');
+        if ($currentRequestLanguage instanceof SiteLanguage) {
+            $enabled = $currentRequestLanguage->toArray()['andersundsehr']['geo_redirect']['enabled'] ?? true;
+            if (!$enabled) {
+                return $handler->handle($request);
+            }
+        }
+
         try {
             // on extension set up the mmdb does not exist, do not break instance
             $targetSiteLanguage = $this->siteLanguageFinderService->findByRequest($request);
@@ -63,7 +72,6 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
             return $handler->handle($request);
         }
 
-        $currentRequestLanguage = $request->getAttribute('language');
         if ($targetSiteLanguage === $currentRequestLanguage) {
             return $handler->handle($request);
         }

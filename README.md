@@ -31,6 +31,19 @@ Otherwise it will ignore the request origin country. And just use the Accept-Lan
 - `ipCountryIsMoreImportantThanLanguage`: If it is more important that the user gets the content for his country than that he gets content for his languages, then turn this option on.
 - `maxmindLicenseKey`: Maxmind.com License Key: if you want to use the mmdb file you should add the license key (https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
 
+### Disable for language
+
+By default the extension will try to redirect the user to the correct language version of the site.
+You can disable this for a specific language by adding the following configuration to your `config.yaml` file:
+
+```YAML
+languages:
+  - # Choose the language you want to disable the geo redirect for
+    andersundsehr:
+      geo_redirect:
+        enabled: false
+```
+
 ### mmdb file
 
 The mmdb file is downloaded from maxmind.com and is updated *every 5 weeks* automatically.
