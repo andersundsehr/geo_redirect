@@ -55,6 +55,7 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
         if ($site instanceof NullSite) {
             return $handler->handle($request);
         }
+
         $currentRequestLanguage = $request->getAttribute('language');
         if ($currentRequestLanguage instanceof SiteLanguage) {
             $enabled = $currentRequestLanguage->toArray()['andersundsehr']['geo_redirect']['enabled'] ?? true;
