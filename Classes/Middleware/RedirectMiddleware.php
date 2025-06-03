@@ -20,7 +20,6 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\Site\Entity\SiteInterface;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterface
 {
