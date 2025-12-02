@@ -57,7 +57,7 @@ final class CollectIpCountryLocatorEvent
         }
 
         if (!is_a($countryLocator, IpCountryLocatorInterface::class, true)) {
-            throw new Exception('Class ' . $countryLocator . ' does not exist.', 9265581551);
+            throw new Exception('Class ' . $countryLocator . ' dose not implement the ' . IpCountryLocatorInterface::class . '.', 9265581551);
         }
     }
 }

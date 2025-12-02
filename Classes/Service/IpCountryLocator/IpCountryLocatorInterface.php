@@ -2,6 +2,9 @@
 
 namespace AUS\GeoRedirect\Service\IpCountryLocator;
 
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+
+#[Autoconfigure(public: true)]
 interface IpCountryLocatorInterface
 {
     /**

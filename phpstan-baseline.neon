@@ -1,11 +1,13 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Instanceof between AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\CloudflareHeader\\|AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\MmdbFile\\|AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\SucuriHeader and AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator will always evaluate to false\\.$#"
+			message: '#^Call to function is_a\(\) with arguments class\-string\<T of AUS\\GeoRedirect\\Service\\IpCountryLocator\\IpCountryLocatorInterface\>, ''AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\IpCountryLocatorInterface'' and true will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
-			path: Classes/Service/IpCountryLocator.php
+			path: Classes/Dto/CollectIpCountryLocatorEvent.php
 
 		-
-			message: "#^Method AUS\\\\GeoRedirect\\\\XClass\\\\Redirects\\\\Service\\\\RedirectService\\:\\:bootFrontendController\\(\\) has invalid return type TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\.$#"
+			message: '#^Instanceof between AUS\\GeoRedirect\\Service\\IpCountryLocator\\IpCountryLocatorInterface and AUS\\GeoRedirect\\Service\\IpCountryLocator\\IpCountryLocatorInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
 			count: 1
-			path: Classes/XClass/Redirects/Service/RedirectService.php
+			path: Classes/Service/IpCountryLocator.php
