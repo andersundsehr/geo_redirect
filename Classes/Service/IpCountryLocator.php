@@ -14,6 +14,8 @@ use RuntimeException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+use function assert;
+
 final class IpCountryLocator implements IpCountryLocatorInterface, SingletonInterface
 {
     private string $ipCountry;
@@ -31,15 +33,16 @@ final class IpCountryLocator implements IpCountryLocatorInterface, SingletonInte
             return $this->ipCountry ?: null;
         }
 
-        $geoLocatorClasses = $this->eventDispatcher
+        /** @var CollectIpCountryLocatorEvent<IpCountryLocatorInterface> $event */
+        $event = $this->eventDispatcher
             ->dispatch(
                 new CollectIpCountryLocatorEvent([
                     SucuriHeader::class,
                     CloudflareHeader::class,
                     MmdbFile::class,
                 ])
-            )
-            ->getLocatorClasses();
+            );
+        $geoLocatorClasses = $event->getLocatorClasses();
 
         foreach ($geoLocatorClasses as $locatorClass) {
             $locator = GeneralUtility::makeInstance($locatorClass);

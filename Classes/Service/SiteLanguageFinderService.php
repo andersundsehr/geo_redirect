@@ -11,9 +11,13 @@ use CodeZero\BrowserLocale\Locale;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 
+use function assert;
+
+#[Autoconfigure(public: true)]
 final readonly class SiteLanguageFinderService
 {
     public function __construct(
@@ -26,11 +30,14 @@ final readonly class SiteLanguageFinderService
     public function findByRequest(?ServerRequestInterface $request = null): SiteLanguage
     {
         $request ??= $GLOBALS['TYPO3_REQUEST'] ?? throw new RuntimeException('No request found This api is not working in cli mode', 9665405638);
+        assert($request instanceof ServerRequestInterface);
 
+        $site = $request->getAttribute('site');
+        assert($site instanceof Site);
         return $this->findLanguage(
             $request->getHeaderLine('accept-language'),
             $this->ipCountryLocator->getIpCountry() ?? '',
-            $request->getAttribute('site')
+            $site
         );
     }
 
@@ -39,6 +46,7 @@ final readonly class SiteLanguageFinderService
         $httpHeader = strtolower($httpHeader);
         $ipCountryCode = strtolower($ipCountryCode);
         $event = $this->eventDispatcher->dispatch(new BeforeSiteLanguageFinderEvent($httpHeader, $ipCountryCode, $site));
+        assert($event instanceof BeforeSiteLanguageFinderEvent);
         if ($event->siteLanguage) {
             return $event->siteLanguage;
         }

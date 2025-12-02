@@ -22,7 +22,6 @@ final class RedirectService extends \TYPO3\CMS\Redirects\Service\RedirectService
     public function getTargetUrl(array $matchedRedirect, ServerRequestInterface $request): ?UriInterface
     {
         $siteLanguageFinderService = GeneralUtility::makeInstance(SiteLanguageFinderService::class);
-        assert($siteLanguageFinderService instanceof SiteLanguageFinderService);
         $this->siteLanguage = $siteLanguageFinderService->findByRequest($request);
         $url = parent::getTargetUrl($matchedRedirect, $request);
         if (null !== $url) {
