@@ -14,7 +14,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->cacheClass(FileCacheStorage::class);
     $rectorConfig->cacheDirectory('./var/cache/rector');
 
-    $paths = array_filter(explode("\n", (string)shell_exec("git ls-files | xargs ls -d 2>/dev/null | grep -E '\.(php|html|typoscript)$'")), fn($path): bool => $path && !str_starts_with($path, 'vendor/'));
+    $paths = array_filter(explode("\n", (string)shell_exec("git ls-files | xargs ls -d 2>/dev/null | grep -E '\.(php|html|typoscript)$'")), fn($path): bool => $path && !str_starts_with((string) $path, 'vendor/'));
 
     $rectorConfig->paths($paths);
 
