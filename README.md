@@ -68,7 +68,18 @@ All sys_redirect records that use a t3://page?uid= link are automatically redire
 
 get the ip country for the current request:
 ````php
-$ipCountryOrNull = GeneralUtility::makeInstance(IpCountryLocatorInterface::class)->getIpCountry();
+class MyClass {
+    // inject the IpCountryLocatorInterface using constructor DI
+    public __construct(
+        protected readonly IpCountryLocatorInterface $ipCountryLocator
+    ) {
+    }
+    
+    // retrieve the country from the request
+    public function getIpCountry(): ?string {
+        return $this->ipCountryLocator->getIpCountry();
+    }
+}
 ````
 
 get the detected language:

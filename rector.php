@@ -6,6 +6,7 @@ use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
 use PLUS\GrumPHPConfig\RectorSettings;
 use Rector\Config\RectorConfig;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
+use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->parallel();
@@ -37,6 +38,7 @@ return static function (RectorConfig $rectorConfig): void {
              * rector should not touch these files
              */
             ReadOnlyClassRector::class,
+            NullToStrictStringFuncCallArgRector::class,
         ]
     );
 };
