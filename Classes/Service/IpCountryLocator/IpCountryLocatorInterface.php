@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AUS\GeoRedirect\Service\IpCountryLocator;
 
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;

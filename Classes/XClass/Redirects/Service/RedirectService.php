@@ -10,6 +10,13 @@ use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * Overrides TYPO3's redirect service to generate page redirect targets for the
+ * site language selected by this extension's language finder.
+ *
+ * If the translated target cannot be resolved, the service retries without
+ * forcing the resolved language so the core fallback URL can still be used.
+ */
 final class RedirectService extends \TYPO3\CMS\Redirects\Service\RedirectService
 {
     private SiteLanguage $siteLanguage;
