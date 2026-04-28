@@ -1,7 +1,5 @@
 <?php
 
-use Composer\InstalledVersions;
-
 /** @var string $_EXTKEY */
 $EM_CONF[$_EXTKEY] = [
     'title' => 'anders und sehr: geo redirect',
@@ -10,10 +8,10 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Matthias Vogel',
     'author_email' => 'm.vogel@andersundsehr.com',
     'state' => 'stable',
-    'version' => InstalledVersions::getPrettyVersion('andersundsehr/geo_redirect'),
+    'version' => 'dev-',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.0.0 - 12.99.99',
+            'typo3' => '11.0.0 - 13.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],
