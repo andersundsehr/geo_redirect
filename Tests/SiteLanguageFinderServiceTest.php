@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace AUS\GeoRedirect\Tests;
 
+use AUS\GeoRedirect\Dto\BeforeSiteLanguageFinderEvent;
+use AUS\GeoRedirect\Service\IpCountryLocator\IpCountryLocatorInterface;
+use AUS\GeoRedirect\Service\IpCountryLocator\SucuriHeader;
 use Generator;
+use GuzzleHttp\Psr7\ServerRequest;
 use AUS\GeoRedirect\Service\IpCountryLocator\NullLocator;
 use AUS\GeoRedirect\Service\SiteLanguageFinderService;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
@@ -46,42 +52,23 @@ final class SiteLanguageFinderServiceTest extends TestCase
         self::assertSame($expected, $result);
     }
 
+    #[Test]
+    public function findByRequestUsesAcceptLanguageSiteAndIpCountryFromLocator(): void
+    {
+        $site = self::createSite();
+        $request = (new ServerRequest('GET', '/'))
+            ->withHeader('accept-language', 'en-US,en;q=0.5,ja;q=0.5')
+            ->withAttribute('site', $site);
+        $service = new SiteLanguageFinderService(new NullLocator(), new NoopEventDispatcher());
+
+        $result = $service->findByRequest($request);
+
+        self::assertEquals($site->getLanguageById(self::EN_US), $result);
+    }
+
     public static function findSiteDataProvider(): Generator
     {
-        $site = new Site('site', 14253, [
-            'languages' => [
-                [
-                    'languageId' => self::DE,
-                    'hreflang' => 'de',
-                    'locale' => 'de_DE.UTF-8',
-                ],
-                [
-                    'languageId' => self::EN,
-                    'hreflang' => 'en',
-                    'locale' => 'en_EN.UTF-8',
-                ],
-                [
-                    'languageId' => self::FR,
-                    'hreflang' => 'fr',
-                    'locale' => 'fr_FR.UTF-8',
-                ],
-                [
-                    'languageId' => self::EN_US,
-                    'hreflang' => 'en-us',
-                    'locale' => 'en_US.UTF-8',
-                ],
-                [
-                    'languageId' => self::JA_JP,
-                    'hreflang' => 'ja-jp',
-                    'locale' => 'ja_JP.UTF-8',
-                ],
-                [
-                    'languageId' => self::EN_JP,
-                    'hreflang' => 'en-jp',
-                    'locale' => 'en_US.UTF-8',
-                ],
-            ],
-        ]);
+        $site = self::createSite();
         yield 'nothing given => default language' => [
             'expected' => $site->getDefaultLanguage(),
             'httpHeader' => '',
@@ -164,5 +151,43 @@ final class SiteLanguageFinderServiceTest extends TestCase
             'ipCountryCode' => 'de',
             'site' => $site,
         ];
+    }
+
+    private static function createSite(): Site
+    {
+        return new Site('site', 14253, [
+            'languages' => [
+                [
+                    'languageId' => self::DE,
+                    'hreflang' => 'de',
+                    'locale' => 'de_DE.UTF-8',
+                ],
+                [
+                    'languageId' => self::EN,
+                    'hreflang' => 'en',
+                    'locale' => 'en_EN.UTF-8',
+                ],
+                [
+                    'languageId' => self::FR,
+                    'hreflang' => 'fr',
+                    'locale' => 'fr_FR.UTF-8',
+                ],
+                [
+                    'languageId' => self::EN_US,
+                    'hreflang' => 'en-us',
+                    'locale' => 'en_US.UTF-8',
+                ],
+                [
+                    'languageId' => self::JA_JP,
+                    'hreflang' => 'ja-jp',
+                    'locale' => 'ja_JP.UTF-8',
+                ],
+                [
+                    'languageId' => self::EN_JP,
+                    'hreflang' => 'en-jp',
+                    'locale' => 'en_US.UTF-8',
+                ],
+            ],
+        ]);
     }
 }

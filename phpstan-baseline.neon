@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Call to function is_a\(\) with arguments class\-string\<T of AUS\\GeoRedirect\\Service\\IpCountryLocator\\IpCountryLocatorInterface\>, ''AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\IpCountryLocatorInterface'' and true will always evaluate to true\.$#'
+			message: '#^Call to function is_a\(\) with arguments class\-string\<AUS\\GeoRedirect\\Service\\IpCountryLocator\\IpCountryLocatorInterface\>, ''AUS\\\\GeoRedirect\\\\Service\\\\IpCountryLocator\\\\IpCountryLocatorInterface'' and true will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 1
 			path: Classes/Dto/CollectIpCountryLocatorEvent.php
@@ -11,3 +11,9 @@ parameters:
 			identifier: instanceof.alwaysTrue
 			count: 1
 			path: Classes/Service/IpCountryLocator.php
+
+		-
+			message: '#^Trait AUS\\GeoRedirect\\XClass\\Redirects\\Service\\RedirectServiceTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: Classes/XClass/Redirects/Service/RedirectServiceTrait.php

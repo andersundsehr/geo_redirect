@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AUS\GeoRedirect\Service\IpCountryLocator;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(public: true)]
@@ -14,7 +15,7 @@ interface IpCountryLocatorInterface
      *
      * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
      */
-    public function getIpCountry(): ?string;
+    public function getIpCountry(?ServerRequestInterface $request): ?string;
 
-    public function getDebugInfo(): string;
+    public function getDebugInfo(?ServerRequestInterface $request): string;
 }

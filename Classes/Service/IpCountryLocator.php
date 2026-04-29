@@ -10,6 +10,7 @@ use AUS\GeoRedirect\Service\IpCountryLocator\IpCountryLocatorInterface;
 use AUS\GeoRedirect\Service\IpCountryLocator\MmdbFile;
 use AUS\GeoRedirect\Service\IpCountryLocator\SucuriHeader;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -27,13 +28,13 @@ final class IpCountryLocator implements IpCountryLocatorInterface, SingletonInte
     {
     }
 
-    public function getIpCountry(): ?string
+    public function getIpCountry(?ServerRequestInterface $request): ?string
     {
         if (isset($this->ipCountry)) {
             return $this->ipCountry ?: null;
         }
 
-        /** @var CollectIpCountryLocatorEvent<IpCountryLocatorInterface> $event */
+        /** @var CollectIpCountryLocatorEvent $event */
         $event = $this->eventDispatcher
             ->dispatch(
                 new CollectIpCountryLocatorEvent([
@@ -55,9 +56,9 @@ final class IpCountryLocator implements IpCountryLocatorInterface, SingletonInte
                 continue;
             }
 
-            $countryCode = $locator->getIpCountry();
+            $countryCode = $locator->getIpCountry($request);
             $this->debugInfo[] = $locatorClass . ':';
-            $this->debugInfo[] = $locator->getDebugInfo();
+            $this->debugInfo[] = $locator->getDebugInfo($request);
             if ($countryCode) {
                 $this->debugInfo[] = 'countryCode: ' . $countryCode;
                 return $this->ipCountry = $countryCode;
@@ -72,9 +73,9 @@ final class IpCountryLocator implements IpCountryLocatorInterface, SingletonInte
         return null;
     }
 
-    public function getDebugInfo(): string
+    public function getDebugInfo(?ServerRequestInterface $request): string
     {
-        $this->getIpCountry();
+        $this->getIpCountry($request);
         return implode(PHP_EOL, array_filter($this->debugInfo));
     }
 }

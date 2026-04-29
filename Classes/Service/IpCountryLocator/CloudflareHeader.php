@@ -10,14 +10,12 @@ use TYPO3\CMS\Core\Http\ServerRequestFactory;
 
 final class CloudflareHeader implements IpCountryLocatorInterface
 {
-    public function getIpCountry(): ?string
+    public function getIpCountry(?ServerRequestInterface $request): ?string
     {
-        if (Environment::isCli()) {
+        if (!$request) {
             return null;
         }
 
-        $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
-        assert($request instanceof ServerRequestInterface);
         $country = strtolower($request->getHeaderLine('CF-IPCountry'));
         if ($country === 'xx') {
             return null;
@@ -26,7 +24,7 @@ final class CloudflareHeader implements IpCountryLocatorInterface
         return $country ?: null;
     }
 
-    public function getDebugInfo(): string
+    public function getDebugInfo(?ServerRequestInterface $request): string
     {
         return '';
     }
