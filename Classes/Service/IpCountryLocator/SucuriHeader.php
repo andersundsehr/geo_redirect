@@ -10,18 +10,16 @@ use TYPO3\CMS\Core\Http\ServerRequestFactory;
 
 final class SucuriHeader implements IpCountryLocatorInterface
 {
-    public function getIpCountry(): ?string
+    public function getIpCountry(?ServerRequestInterface $request): ?string
     {
-        if (Environment::isCli()) {
+        if (!$request) {
             return null;
         }
 
-        $request = $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
-        assert($request instanceof ServerRequestInterface);
         return strtolower($request->getHeaderLine('X-Sucuri-Country')) ?: null;
     }
 
-    public function getDebugInfo(): string
+    public function getDebugInfo(?ServerRequestInterface $request): string
     {
         return '';
     }

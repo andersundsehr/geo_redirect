@@ -38,8 +38,8 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($request->getUri()->getPath() === '/geo_redirect/debug') {
-            $debugInfo = str_replace(PHP_EOL, '<br>', $this->ipCountryLocator->getDebugInfo());
-            $statusCode = $this->ipCountryLocator->getIpCountry() ? 200 : 404;
+            $debugInfo = str_replace(PHP_EOL, '<br>', $this->ipCountryLocator->getDebugInfo($request));
+            $statusCode = $this->ipCountryLocator->getIpCountry($request) ? 200 : 404;
             $siteLanguage = $this->siteLanguageFinderService->findByRequest($request);
             $debugInfo .= sprintf('<br><br>siteLanguage detected: <a href="%s">%s</a>', $siteLanguage->getBase(), $siteLanguage->getBase());
             return new HtmlResponse($debugInfo, $statusCode, ['X-Robots-Tag' => 'noindex, nofollow']);
@@ -80,7 +80,7 @@ final class RedirectMiddleware implements MiddlewareInterface, LoggerAwareInterf
             return $handler->handle($request);
         }
 
-        $ipCountryCode = $this->ipCountryLocator->getIpCountry() ?? '';
+        $ipCountryCode = $this->ipCountryLocator->getIpCountry($request) ?? '';
         return new RedirectResponse($targetSiteLanguage->getBase(), 307, ['X-RedirectReason' => 'geo_redirect ipCountry: "' . $ipCountryCode . '"']);
     }
 }

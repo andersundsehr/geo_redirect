@@ -7,24 +7,21 @@ namespace AUS\GeoRedirect\Dto;
 use AUS\GeoRedirect\Service\IpCountryLocator\IpCountryLocatorInterface;
 use Exception;
 
-/**
- * @template T of IpCountryLocatorInterface
- */
 final class CollectIpCountryLocatorEvent
 {
-    /** @param class-string<T>[] $locatorClasses */
+    /** @param class-string<IpCountryLocatorInterface>[] $locatorClasses */
     public function __construct(private array $locatorClasses)
     {
     }
 
-    /** @param class-string<T> $locatorClass */
+    /** @param class-string<IpCountryLocatorInterface> $locatorClass */
     public function addFirst(string $locatorClass): void
     {
         $this->validate($locatorClass);
         array_unshift($this->locatorClasses, $locatorClass);
     }
 
-    /** @param class-string<T> $countryLocator */
+    /** @param class-string<IpCountryLocatorInterface> $countryLocator */
     public function addLast(string $countryLocator): void
     {
         $this->validate($countryLocator);
@@ -32,14 +29,14 @@ final class CollectIpCountryLocatorEvent
     }
 
     /**
-     * @return class-string<T>[]
+     * @return class-string<IpCountryLocatorInterface>[]
      */
     public function getLocatorClasses(): array
     {
         return array_unique($this->locatorClasses);
     }
 
-    /** @param class-string<T>[] $locatorClasses */
+    /** @param class-string<IpCountryLocatorInterface>[] $locatorClasses */
     public function setLocatorClasses(array $locatorClasses): void
     {
         foreach ($locatorClasses as $locatorClass) {
@@ -49,7 +46,7 @@ final class CollectIpCountryLocatorEvent
         $this->locatorClasses = $locatorClasses;
     }
 
-    /** @param class-string<T> $countryLocator */
+    /** @param class-string<IpCountryLocatorInterface> $countryLocator */
     private function validate(string $countryLocator): void
     {
         if (!class_exists($countryLocator)) {

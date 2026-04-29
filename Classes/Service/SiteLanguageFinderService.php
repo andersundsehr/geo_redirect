@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace AUS\GeoRedirect\Service;
 
+use AUS\GeoRedirect\BrowserLocale\BrowserLocale;
+use AUS\GeoRedirect\BrowserLocale\Locale;
 use AUS\GeoRedirect\Dto\BeforeSiteLanguageFinderEvent;
 use AUS\GeoRedirect\Service\IpCountryLocator\IpCountryLocatorInterface;
-use CodeZero\BrowserLocale\BrowserLocale;
-use CodeZero\BrowserLocale\Locale;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
@@ -27,16 +27,13 @@ final readonly class SiteLanguageFinderService
     ) {
     }
 
-    public function findByRequest(?ServerRequestInterface $request = null): SiteLanguage
+    public function findByRequest(ServerRequestInterface $request): SiteLanguage
     {
-        $request ??= $GLOBALS['TYPO3_REQUEST'] ?? throw new RuntimeException('No request found This api is not working in cli mode', 9665405638);
-        assert($request instanceof ServerRequestInterface);
-
         $site = $request->getAttribute('site');
         assert($site instanceof Site);
         return $this->findLanguage(
             $request->getHeaderLine('accept-language'),
-            $this->ipCountryLocator->getIpCountry() ?? '',
+            $this->ipCountryLocator->getIpCountry($request) ?? '',
             $site
         );
     }
@@ -71,8 +68,6 @@ final readonly class SiteLanguageFinderService
         if ($this->ipCountryIsMoreImportantThanLanguage) {
             // foreach language test if that language  + ipCountry is found
             foreach ($browserLocale->getLocales() as $locale) {
-                assert($locale instanceof Locale);
-
                 $siteLanguage = $siteLanguages[$locale->language . '-' . $ipCountryCode] ?? null;
                 if ($siteLanguage) {
                     return $siteLanguage;
@@ -82,8 +77,6 @@ final readonly class SiteLanguageFinderService
 
         // foreach language test:
         foreach ($browserLocale->getLocales() as $locale) {
-            assert($locale instanceof Locale);
-
             $siteLanguage =
                 // test if language is found with country from ip
                 $siteLanguages[$locale->language . '-' . $ipCountryCode]

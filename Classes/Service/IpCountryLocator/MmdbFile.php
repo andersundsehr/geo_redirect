@@ -6,6 +6,7 @@ namespace AUS\GeoRedirect\Service\IpCountryLocator;
 
 use GuzzleHttp\Client;
 use MaxMind\Db\Reader;
+use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Core\Environment;
@@ -22,14 +23,14 @@ final class MmdbFile implements IpCountryLocatorInterface, SingletonInterface
     ) {
     }
 
-    public function getIpCountry(): ?string
+    public function getIpCountry(?ServerRequestInterface $request): ?string
     {
         $ip = GeneralUtility::getIndpEnv('REMOTE_ADDR');
         if (!$ip) {
             return null;
         }
 
-        $ipRecord =  $this->getReader()->get($ip);
+        $ipRecord =  $this->getReader()?->get($ip);
         if (null === $ipRecord) {
             return null;
         }
@@ -40,7 +41,7 @@ final class MmdbFile implements IpCountryLocatorInterface, SingletonInterface
         return strtolower($country) ?: null;
     }
 
-    public function getDebugInfo(): string
+    public function getDebugInfo(?ServerRequestInterface $request): string
     {
         $databaseFile = $this->getDatabaseFileName();
         $mmdbFileExists = file_exists($databaseFile);
@@ -52,8 +53,12 @@ final class MmdbFile implements IpCountryLocatorInterface, SingletonInterface
     }
 
 
-    public function getReader(): Reader
+    public function getReader(): ?Reader
     {
+        if (!$this->maxmindLicenseKey) {
+            return null;
+        }
+
         if ($this->reader ?? null) {
             return $this->reader;
         }

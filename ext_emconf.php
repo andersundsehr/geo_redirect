@@ -11,9 +11,14 @@ $EM_CONF[$_EXTKEY] = [
     'version' => 'dev-',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.0.0 - 13.4.99',
+            'typo3' => '11.5.0 - 14.3.99',
         ],
         'conflicts' => [],
         'suggests' => [],
+    ],
+    'autoload' => [
+        'psr-4' => [
+            'AUS\\GeoRedirect\\' => 'Classes',
+        ],
     ],
 ];
