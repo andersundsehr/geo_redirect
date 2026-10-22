@@ -16,7 +16,7 @@ Get your key here: https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
 ## Features
 
 - Redirect domain root to detected language
-- Redirect sys_redirect to detected language (TYPO3 => v12 only)
+- Redirect sys_redirect to detected language
 
 ## How it works
 
