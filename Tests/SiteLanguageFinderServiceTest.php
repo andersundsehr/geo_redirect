@@ -22,23 +22,17 @@ use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 
 final class SiteLanguageFinderServiceTest extends TestCase
 {
-    /** @var int */
-    public const DE = 0;
+    public const int DE = 0;
 
-    /**  @var int */
-    public const EN = 1;
+    public const int EN = 1;
 
-    /** @var int */
-    public const EN_US = 2;
+    public const int EN_US = 2;
 
-    /** @var int */
-    public const JA_JP = 3;
+    public const int JA_JP = 3;
 
-    /** @var int */
-    public const EN_JP = 4;
+    public const int EN_JP = 4;
 
-    /** @var int */
-    public const FR = 5;
+    public const int FR = 5;
 
     #[Test]
     #[DataProvider('findSiteDataProvider')]
